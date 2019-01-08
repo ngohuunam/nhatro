@@ -53,7 +53,7 @@ export default class App extends Component {
         token: '',
         room: '',
         ver: '',
-        notice: status === 407 ? 'Phiên bản cũ, REFRESH lại trang để cập nhật' : 'Từ chối đăng nhập',
+        notice: status === 407 ? 'Phiên bản cũ, REFRESH lại trang để update' : 'Từ chối đăng nhập',
       })
       this.logout()
     } else this.setState({ notice: 'Không có dữ liệu' })
@@ -68,6 +68,7 @@ export default class App extends Component {
         datas: this.state.datas,
         room: this.state.room,
         user: this.state.user,
+        ver: this.state.ver,
       }),
     )
   }
@@ -181,7 +182,14 @@ export default class App extends Component {
           {label}
         </label>
         <div className={'flex-' + (reverse ? '40' : '60')}>
-          <input type={type} name={name} value={this.state[name]} placeholder={placeholder} onInput={this.onInput} onKeyUp={this.keyUpEv} />
+          <input
+            type={type}
+            name={name}
+            value={this.state[name]}
+            placeholder={placeholder}
+            onInput={this.onInput}
+            onKeyUp={this.keyUpEv}
+          />
         </div>
       </div>
     )
@@ -340,16 +348,16 @@ export default class App extends Component {
     )
   }
 
-  renderOtherFee = khac => {
-    if (khac.tien)
+  renderOtherFee = fee => {
+    if (fee.tien)
       return (
         <div>
-          <div>{khac.khoan || 'Khác'}</div>
+          <div>{fee.khoan || 'Khác'}</div>
           <div>-</div>
           <div>-</div>
           <div>-</div>
           <div>-</div>
-          <div>{khac.tien.toLocaleString('vi')}</div>
+          <div>{fee.tien.toLocaleString('vi')}</div>
         </div>
       )
   }
@@ -381,9 +389,10 @@ export default class App extends Component {
         <fieldset>
           <legend>Lưu ý:</legend>
           <div>
-            Ngày 5 -> 8 hàng tháng, người thuê đăng nhập vào bằng tài khoản đã cung cấp theo số phòng, điền số điện, số nước mới để ra bill
-            tiền nhà hàng tháng, ngày 10 cô Nhường sẽ lên thu tiền vào sáng sớm, từ 5h -> 8h sáng. Vui lòng chuẩn bị tiền đầy đủ để cô thu 1
-            lần, nếu không thu được, thì người thuê có trách nhiệm mang tiền đến nộp tại nhà cô ở Quận 3, hoặc chuyển khoản.
+            Ngày 5 -> 8 hàng tháng, người thuê đăng nhập vào bằng tài khoản đã cung cấp theo số phòng, điền số điện, số nước mới
+            để ra bill tiền nhà hàng tháng, ngày 10 cô Nhường sẽ lên thu tiền vào sáng sớm, từ 5h -> 8h sáng. Vui lòng chuẩn bị
+            tiền đầy đủ để cô thu 1 lần, nếu không thu được, thì người thuê có trách nhiệm mang tiền đến nộp tại nhà cô ở Quận 3,
+            hoặc chuyển khoản.
           </div>
         </fieldset>
         <fieldset>
@@ -463,7 +472,9 @@ export default class App extends Component {
                     <div>{d.nuoc.gia.toLocaleString('vi')}</div>
                     <div>{d.nuoc.thanhtien ? d.nuoc.thanhtien.toLocaleString('vi') : '---'}</div>
                   </div>
+                  {this.renderOtherFee({ khoan: 'CỌC', tien: d.deposit })}
                   {this.renderOtherFee(d.khac)}
+                  {this.renderOtherFee(d.chi)}
                   <div>
                     <div>Rác</div>
                     <div>-</div>
