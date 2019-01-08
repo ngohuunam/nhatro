@@ -43,19 +43,24 @@ export default class App extends Component {
     })
   }
 
-  handleErrRes = status => {
+  handleErrRes = res => {
+    console.log(res)
     this.setState({ confirm: false, loading: false })
-    if (status === 405) this.setState({ notice: 'Sai Mật khẩu' })
-    else if (status === 406 || status === 407) {
-      this.setState({
-        datas: [],
-        user: '',
-        token: '',
-        room: '',
-        ver: '',
-        notice: status === 407 ? 'Phiên bản cũ, REFRESH lại trang để update' : 'Từ chối đăng nhập',
+    if (res.status === 405) this.setState({ notice: 'Sai Mật khẩu' })
+    else if (res.status === 406 || res.status === 444) {
+      res.text().then(txt => {
+        console.log(txt)
+        this.setState({
+          datas: [],
+          user: '',
+          token: '',
+          room: '',
+          ver: '',
+          notice:
+            res.status === 444 ? `Ver ${this.state.ver} đã cũ, REFRESH lại để update. Ver đúng là ${txt}` : 'Từ chối đăng nhập',
+        })
+        this.logout()
       })
-      this.logout()
     } else this.setState({ notice: 'Không có dữ liệu' })
   }
 
@@ -94,7 +99,7 @@ export default class App extends Component {
     })
       .then(res => {
         if (res.status === 200) res.json().then(json => this.handleRes(req, json))
-        else this.handleErrRes(res.status)
+        else this.handleErrRes(res)
       })
       .catch(e => this.handleErr(e))
   }
@@ -364,7 +369,10 @@ export default class App extends Component {
 
   logout = () => {
     localStorage.removeItem('localState')
-    this.setState(myState)
+    const tempState = { ...{}, ...myState }
+    tempState.notice = this.state.notice
+    console.log(tempState)
+    this.setState(tempState)
     if ('serviceWorker' in navigator) {
       if (!window.caches) return
       caches
@@ -525,7 +533,7 @@ export default class App extends Component {
     return (
       <div>
         {this.renderMainPage()}
-        <div class="version">{ver}</div>
+        <div class="version">Ver: {ver}</div>
       </div>
     )
   }

@@ -14,7 +14,7 @@ const state = {
   confirm: false,
   token: '',
   temp: '',
-  ver: '20190108.1638',
+  ver: '20190108.2109',
 }
 
 export default state
