@@ -349,7 +349,7 @@ export default class App extends Component {
   }
 
   renderOtherFee = fee => {
-    if (fee.tien)
+    if (fee && fee.tien)
       return (
         <div>
           <div>{fee.khoan || 'Khác'}</div>
