@@ -5,10 +5,11 @@ import rooms from './rooms'
 
 const apiVer = 3
 
-const remote =
-  process.env.NODE_ENV === 'production'
-    ? 'https://busti.club/v' + apiVer + '/nhatro'
-    : 'http://' + location.hostname + ':5000/v' + apiVer + '/nhatro'
+// const remote =
+//   process.env.NODE_ENV === 'production'
+//     ? 'https://busti.club/v' + apiVer + '/nhatro'
+//     : 'http://' + location.hostname + ':5000/v' + apiVer + '/nhatro'
+const remote ='https://nhatroconhuong.com/v' + apiVer + '/nhatro'
 
 export default class App extends Component {
   state = myState
@@ -480,7 +481,7 @@ export default class App extends Component {
                     <div>{d.nuoc.gia.toLocaleString('vi')}</div>
                     <div>{d.nuoc.thanhtien ? d.nuoc.thanhtien.toLocaleString('vi') : '---'}</div>
                   </div>
-                  {this.renderOtherFee({ khoan: 'CỌC', tien: d.deposit })}
+                  {this.renderOtherFee({ khoan: 'Cọc', tien: d.deposit })}
                   {this.renderOtherFee(d.khac)}
                   {this.renderOtherFee(d.chi)}
                   <div>
