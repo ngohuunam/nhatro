@@ -97,9 +97,9 @@ button.large {
 
 .version {
   text-align: center;
-  color: black;
-  font-size: 0.6rem;
-  margin-top: 4px;
+  color: rgb(70, 70, 70);
+  font-size: 0.55rem;
+  margin-bottom: 4px;
 }
 
 .text-left {

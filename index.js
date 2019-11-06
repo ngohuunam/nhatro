@@ -5,11 +5,13 @@ import rooms from './rooms'
 
 const apiVer = 3
 
-// const remote =
-//   process.env.NODE_ENV === 'production'
-//     ? 'https://busti.club/v' + apiVer + '/nhatro'
-//     : 'http://' + location.hostname + ':5000/v' + apiVer + '/nhatro'
-const remote ='https://nhatroconhuong.com/v' + apiVer + '/nhatro'
+const remote =
+  process.env.NODE_ENV === 'production'
+    ? 'https://nhatroconhuong.com/v' + apiVer + '/nhatro'
+    : 'http://' + location.hostname + ':5000/v' + apiVer + '/nhatro'
+// const remote ='https://nhatroconhuong.com/v' + apiVer + '/nhatro'
+
+if (process.env.NODE_ENV !== 'production') myState.pass = '123Bistqt'
 
 export default class App extends Component {
   state = myState
@@ -99,15 +101,17 @@ export default class App extends Component {
       body: body,
     })
       .then(res => {
-        if (res.status === 200) res.json().then(json => this.handleRes(req, json))
+        if (res.status === 200) res.json().then(json => this.handleRes(req, json, res.headers.get('Content-Language')))
         else this.handleErrRes(res)
       })
       .catch(e => this.handleErr(e))
   }
 
-  handleRes = (req, json) => {
+  handleRes = (req, json, sv) => {
     console.log('req', req)
     console.log('json', json)
+    console.log('sv', sv)
+    this.setState({ sv: sv })
     let newDatas
     switch (req) {
       case 'checkAuth':
@@ -399,14 +403,10 @@ export default class App extends Component {
           <legend>Lưu ý:</legend>
           <div>
             Ngày 5 -> 8 hàng tháng, người thuê đăng nhập vào bằng tài khoản đã cung cấp theo số phòng, điền số điện, số nước mới
-            để ra bill tiền nhà hàng tháng, ngày 10 cô Nhường sẽ lên thu tiền vào sáng sớm, từ 5h -> 8h sáng. Vui lòng chuẩn bị
-            tiền đầy đủ để cô thu 1 lần, nếu không thu được, thì người thuê có trách nhiệm mang tiền đến nộp tại nhà cô ở Quận 3,
+            để ra bill tiền nhà hàng tháng, ngày 9 hoặc 10 cô Nhường sẽ lên thu tiền. Vui lòng chuẩn bị
+            tiền đầy đủ để cô thu, nếu không thu được, thì người thuê có trách nhiệm mang tiền đến nhà cô ở Quận 3,
             hoặc chuyển khoản.
           </div>
-        </fieldset>
-        <fieldset>
-          <legend>Chú ý:</legend>
-          <div>Vì cô lớn tuổi, chú thì bệnh, đi lại khó khăn, mong mọi người giúp đỡ</div>
         </fieldset>
         <fieldset>
           <legend>Liên hệ:</legend>
@@ -530,11 +530,13 @@ export default class App extends Component {
     else return this.renderLogin()
   }
 
-  render({}, { ver }) {
+  render({}, { ver, sv }) {
     return (
       <div>
         {this.renderMainPage()}
-        <div class="version">Ver: {ver}</div>
+        <div class="version">
+          client: {ver} - server: {sv}
+        </div>
       </div>
     )
   }
