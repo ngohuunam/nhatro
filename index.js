@@ -1,4 +1,5 @@
 import './style'
+import 'preact/debug'
 import { Component } from 'preact'
 import myState from './state.js'
 import rooms from './rooms'
@@ -26,12 +27,14 @@ export default class App extends Component {
       if (MONTH === 0) MONTH = 12
       const DAY = DATE.getDate()
       this.setState(
-        {
-          token: localState.token,
-          datas: localState.datas,
-          room: localState.room,
-          user: localState.user,
-          ver: localState.ver,
+        _prevState => {
+          return {
+            token: localState.token,
+            datas: localState.datas,
+            room: localState.room,
+            user: localState.user,
+            ver: localState.ver,
+          }
         },
         () => {
           if (localState.datas[0].month === MONTH && !localState.datas[0].thanhtoan) this.fetchData('sync')
@@ -72,17 +75,15 @@ export default class App extends Component {
   }
 
   checkAndSaveLocal = (tongcong, dienkytruoc, nuockytruoc) => {
+    const _data = JSON.stringify({
+      token: this.state.token,
+      datas: this.state.datas,
+      room: this.state.room,
+      user: this.state.user,
+      ver: this.state.ver,
+    })
+    localStorage.setItem('localState', _data)
     if (!tongcong) this.setState({ dien: dienkytruoc, nuoc: nuockytruoc })
-    localStorage.setItem(
-      'localState',
-      JSON.stringify({
-        token: this.state.token,
-        datas: this.state.datas,
-        room: this.state.room,
-        user: this.state.user,
-        ver: this.state.ver,
-      }),
-    )
   }
 
   fetchData = (req, dien, nuoc) => {
@@ -121,25 +122,33 @@ export default class App extends Component {
       case 'checkAuth':
         break
       case 'login':
-        this.setState({
-          token: json.token,
-          datas: json.datas,
-          user: json.datas[0].users[0].name,
-          loading: false,
-          notice: '',
-        })
-        this.checkAndSaveLocal(json.datas[0].tongcong, json.datas[0].dien.sokytruoc, json.datas[0].nuoc.sokytruoc)
+        this.setState(
+          _prevState => {
+            return {
+              token: json.token,
+              datas: json.datas,
+              user: json.datas[0].users[0].name,
+              loading: false,
+              notice: '',
+            }
+          },
+          () => this.checkAndSaveLocal(json.datas[0].tongcong, json.datas[0].dien.sokytruoc, json.datas[0].nuoc.sokytruoc),
+        )
         break
       default:
         newDatas = this.state.datas.slice(0)
         newDatas[0] = json
-        this.setState({
-          datas: newDatas,
-          confirm: false,
-          loading: false,
-          notice: '',
-        })
-        this.checkAndSaveLocal(json.tongcong, json.dien.sokytruoc, json.nuoc.sokytruoc)
+        this.setState(
+          _prevState => {
+            return {
+              datas: newDatas,
+              confirm: false,
+              loading: false,
+              notice: '',
+            }
+          },
+          () => this.checkAndSaveLocal(json.tongcong, json.dien.sokytruoc, json.nuoc.sokytruoc),
+        )
     }
   }
 
