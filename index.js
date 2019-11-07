@@ -54,22 +54,28 @@ export default class App extends Component {
   }
 
   handleErrRes = res => {
-    console.log(res)
+    console.log('handleErrRes', res)
     this.setState({ confirm: false, loading: false })
     if (res.status === 405) this.setState({ notice: 'Sai Mật khẩu' })
     else if (res.status === 406 || res.status === 444) {
       res.text().then(txt => {
-        console.log(txt)
-        this.setState({
-          datas: [],
-          user: '',
-          token: '',
-          room: '',
-          ver: '',
-          notice:
-            res.status === 444 ? `Ver ${this.state.ver} đã cũ, REFRESH lại để update. Ver đúng là ${txt}` : 'Từ chối đăng nhập',
-        })
-        this.logout()
+        console.log('txt', txt)
+        this.setState(
+          _prevState => {
+            return {
+              datas: [],
+              user: '',
+              token: '',
+              room: '',
+              ver: '',
+              notice:
+                res.status === 444
+                  ? `Ver ${this.state.ver} đã cũ, REFRESH lại để update. Ver đúng là ${txt}`
+                  : 'Từ chối đăng nhập',
+            }
+          },
+          () => this.logout(),
+        )
       })
     } else this.setState({ notice: 'Không có dữ liệu' })
   }
