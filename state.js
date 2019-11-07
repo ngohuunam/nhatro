@@ -14,7 +14,7 @@ const state = {
   confirm: false,
   token: '',
   temp: '',
-  ver: '20191107.1453',
+  ver: '20191107.2026',
   sv: '',
 }
 

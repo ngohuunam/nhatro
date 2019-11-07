@@ -25,16 +25,20 @@ export default class App extends Component {
       let MONTH = DATE.getMonth()
       if (MONTH === 0) MONTH = 12
       const DAY = DATE.getDate()
-      this.setState({
-        token: localState.token,
-        datas: localState.datas,
-        room: localState.room,
-        user: localState.user,
-        ver: localState.ver,
-      })
-      if (localState.datas[0].month === MONTH && !localState.datas[0].thanhtoan) this.fetchData('sync')
-      else if (localState.datas[0].month !== MONTH && DAY > 4) this.fetchData('new')
-      else this.fetchData('checkAuth')
+      this.setState(
+        {
+          token: localState.token,
+          datas: localState.datas,
+          room: localState.room,
+          user: localState.user,
+          ver: localState.ver,
+        },
+        () => {
+          if (localState.datas[0].month === MONTH && !localState.datas[0].thanhtoan) this.fetchData('sync')
+          else if (localState.datas[0].month !== MONTH && DAY > 4) this.fetchData('new')
+          else this.fetchData('checkAuth')
+        },
+      )
     }
   }
 
