@@ -363,11 +363,17 @@ export default class App extends Component {
       return (
         <div>
           <div>{fee.khoan || 'Khác'}</div>
-          <div>-</div>
-          <div>-</div>
-          <div>-</div>
-          <div>-</div>
           <div>{fee.tien.toLocaleString('vi')}</div>
+        </div>
+      )
+  }
+
+  renderMorePeople = themNguoi => {
+    if (themNguoi && themNguoi.tongTien)
+      return (
+        <div>
+          <div>Thêm {themNguoi.soNguoi} người</div>
+          <div>{themNguoi.tongTien.toLocaleString('vi')} </div>
         </div>
       )
   }
@@ -403,9 +409,8 @@ export default class App extends Component {
           <legend>Lưu ý:</legend>
           <div>
             Ngày 5 -> 8 hàng tháng, người thuê đăng nhập vào bằng tài khoản đã cung cấp theo số phòng, điền số điện, số nước mới
-            để ra bill tiền nhà hàng tháng, ngày 9 hoặc 10 cô Nhường sẽ lên thu tiền. Vui lòng chuẩn bị
-            tiền đầy đủ để cô thu, nếu không thu được, thì người thuê có trách nhiệm mang tiền đến nhà cô ở Quận 3,
-            hoặc chuyển khoản.
+            để ra bill tiền nhà hàng tháng, ngày 9 hoặc 10 cô Nhường sẽ lên thu tiền. Vui lòng chuẩn bị tiền đầy đủ để cô thu, nếu
+            không thu được, thì người thuê có trách nhiệm mang tiền đến nhà cô ở Quận 3, hoặc chuyển khoản.
           </div>
         </fieldset>
         <fieldset>
@@ -486,20 +491,14 @@ export default class App extends Component {
                   {this.renderOtherFee(d.chi)}
                   <div>
                     <div>Rác</div>
-                    <div>-</div>
-                    <div>-</div>
-                    <div>-</div>
-                    <div>-</div>
                     <div>{d.rac.toLocaleString('vi')}</div>
                   </div>
                   <div>
                     <div>Nhà</div>
-                    <div>-</div>
-                    <div>-</div>
-                    <div>-</div>
-                    <div>-</div>
                     <div>{d.nha.toLocaleString('vi')}</div>
                   </div>
+                  {this.renderOtherFee({ khoan: 'Giữ chìa khóa', tien: d.giuKhoa })}
+                  {this.renderMorePeople(d.themNguoi)}
                   <div>
                     <div class="flex space-between">
                       <div>TỔNG CỘNG</div>
