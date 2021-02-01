@@ -38,7 +38,7 @@ export default class App extends Component {
         },
         () => {
           if (localState.datas[0].month === MONTH && !localState.datas[0].thanhtoan) this.fetchData('sync')
-          else if (localState.datas[0].month !== MONTH && DAY > 4) this.fetchData('new')
+          else if (localState.datas[0].month !== MONTH && DAY > 1) this.fetchData('new')
           else this.fetchData('checkAuth')
         },
       )
