@@ -249,7 +249,7 @@ export default class App extends Component {
     const kynay = Number(value)
     const kytruoc = this.state.datas[1][name].sokynay
     const valid = name + 'Valid'
-    if (kynay - kytruoc < 1)
+    if (kynay - kytruoc < 0)
       this.setState({
         [name]: kynay,
         notice: 'Số mới phải lớn hơn số kỳ trước',
@@ -427,9 +427,9 @@ export default class App extends Component {
         <fieldset>
           <legend>Lưu ý:</legend>
           <div>
-            Ngày 5 -> 8 hàng tháng, người thuê đăng nhập vào bằng tài khoản đã cung cấp theo số phòng, điền số điện, số nước mới
+            {`Ngày 5 -> 8 hàng tháng, người thuê đăng nhập vào bằng tài khoản đã cung cấp theo số phòng, điền số điện, số nước mới
             để ra bill tiền nhà hàng tháng, ngày 9 hoặc 10 cô Nhường sẽ lên thu tiền. Vui lòng chuẩn bị tiền đầy đủ để cô thu, nếu
-            không thu được, thì người thuê có trách nhiệm mang tiền đến nhà cô ở Quận 3, hoặc chuyển khoản.
+            không thu được, thì người thuê có trách nhiệm mang tiền đến nhà cô ở Quận 3, hoặc chuyển khoản.`}
           </div>
         </fieldset>
         <fieldset>
